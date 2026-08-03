@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Binary Battle | Privacy Protocol</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #05010a;
+            --card: rgba(18, 8, 30, 0.7);
+            --accent: #8c00ff;
+            --cyan: #00e5ff;
+            --danger: #ff3e3e;
+            --text-dim: #a5a5a5;
+            --border: #2d1b4d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(140, 0, 255, 0.15) 0%, transparent 50%),
+                linear-gradient(rgba(18, 8, 30, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(18, 8, 30, 0.5) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(18, 8, 30, 0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+        }
+
+        .back-btn {
+            color: var(--cyan);
+            font-size: 20px;
+            margin-right: 20px;
+            text-decoration: none;
+        }
+
+        .header-title {
+            font-family: 'Orbitron';
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--cyan));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            padding: 25px 20px 100px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .policy-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .policy-card::after {
+            content: '';
+            position: absolute;
+            top: -1px; left: 20px; width: 40px; height: 2px;
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .section-header i {
+            color: var(--cyan);
+            font-size: 18px;
+        }
+
+        .section-header h2 {
+            font-family: 'Orbitron';
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .policy-text {
+            color: #e0e0e0;
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .policy-text b { color: #fff; border-bottom: 1px solid var(--accent); }
+
+        .alert-box {
+            background: rgba(255, 62, 62, 0.05);
+            border: 1px solid rgba(255, 62, 62, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .alert-box h3 {
+            color: var(--danger);
+            font-family: 'Orbitron';
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .support-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: 'Orbitron';
+            font-size: 14px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .support-link:active {
+            background: var(--cyan);
+            color: #000;
+        }
+
+        .footer-tag {
+            text-align: center;
+            margin-top: 40px;
+            font-family: 'Orbitron';
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <!-- Link updated to point to home/profile.html -->
+        <a href="profile.html" class="back-btn">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <h1 class="header-title">Privacy Protocol</h1>
+    </header>
+
+    <div class="container">
+        
+        <div class="policy-card">
+            <div class="section-header">
+                <i class="fa-solid fa-user-shield"></i>
+                <h2>Data Encryption</h2>
+            </div>
+            <p class="policy-text">
+                At <b>Binary Battle</b>, we value your privacy. All user data is securely stored and is 
+                <span style="color: var(--cyan);">Never Shared</span> with third parties. We collect data 
+                strictly to optimize matchmaking and ensure smooth, fair gameplay.
+            </p>
+        </div>
+
+        <div class="policy-card">
+            <div class="section-header">
+                <i class="fa-solid fa-lock"></i>
+                <h2>Account Security</h2>
+            </div>
+            <p class="policy-text">
+                Your account security is your primary responsibility. Your password is <b>Private</b> and 
+                visible only to you. 
+            </p>
+            <div class="alert-box">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL WARNING</h3>
+                <p class="policy-text" style="font-size: 13px; color: var(--text-dim);">
+                    Do not share your password with anyone, including the owner or any Binary Battle staff. 
+                    <b>Our team will never ask for your login details.</b>
+                </p>
+            </div>
+        </div>
+
+        <div class="policy-card">
+            <div class="section-header">
+                <i class="fa-solid fa-headset"></i>
+                <h2>Verified Support</h2>
+            </div>
+            <p class="policy-text">
+                For assistance, use only our official encrypted channel. Beware of fake accounts pretending 
+                to represent our brand.
+            </p>
+            <a href="https://chat.whatsapp.com/EquQhxqohHT0vTYLMCr7zC" class="support-link">
+                <i class="fa-brands fa-whatsapp"></i> BinaryBattleCare
+            </a>
+            <p class="policy-text" style="font-size: 12px; color: var(--danger); margin-top: 15px; text-align: center;">
+                We are not responsible for losses caused by unofficial contacts.
+            </p>
+        </div>
+
+        <div class="policy-card">
+            <div class="section-header">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <h2>Financial Integrity</h2>
+            </div>
+            <p class="policy-text">
+                <b>No Tips or Fees:</b> Do not make payments directly to staff members. No additional charges 
+                are required beyond standard entry fees, as our staff is fully compensated.
+            </p>
+        </div>
+
+        <div class="footer-tag">
+            STAY INFORMED • STAY SECURE
+        </div>
+
+    </div>
+
+</body>
+</html>

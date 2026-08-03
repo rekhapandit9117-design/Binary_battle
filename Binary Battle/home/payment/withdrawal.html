@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Withdraw Funds | Binary Battle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05010a;
+            --card: rgba(25, 10, 50, 0.8);
+            --accent: #ff0055;
+            --cyan: #00e5ff;
+            --border: #2d1b4d;
+            --success: #00ff88;
+            --text-dim: #a5a5a5;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        body { 
+            background: var(--bg); color: #fff; min-height: 100vh; 
+            background-image: radial-gradient(circle at 50% -20%, #4b001a 0%, transparent 60%);
+            padding-bottom: 40px; overflow-x: hidden;
+        }
+
+        .header { padding: 30px 20px 20px; display: flex; align-items: center; gap: 15px; }
+        .back-btn { width: 40px; height: 40px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--accent); text-decoration: none; }
+        .header h1 { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 1px; }
+
+        .container { padding: 0 20px; max-width: 500px; margin: 0 auto; }
+
+        .balance-pill {
+            background: rgba(255, 0, 85, 0.05); border: 1px solid var(--accent);
+            padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 25px;
+        }
+        .balance-label { font-size: 11px; text-transform: uppercase; color: var(--text-dim); }
+        .balance-amount { font-family: 'Orbitron'; font-size: 24px; color: #fff; margin-top: 5px; }
+
+        .input-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 25px; backdrop-filter: blur(10px); margin-bottom: 20px; }
+        .section-label { font-size: 12px; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 20px; display: block; }
+
+        .amount-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+        .chip { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 15px 5px; border-radius: 12px; text-align: center; font-family: 'Orbitron'; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .chip.active { background: var(--accent); border-color: #ff6090; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4); }
+
+        .fee-calc-box { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; border: 1px solid var(--border); }
+        .calc-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .receive-text { color: var(--success); font-weight: 700; font-family: 'Orbitron'; }
+
+        .upi-input { width: 100%; background: #000; border: 1.5px solid var(--border); padding: 15px; border-radius: 12px; color: var(--cyan); font-family: 'Orbitron'; outline: none; text-align: center; margin-top: 10px; }
+
+        .withdraw-btn { width: 100%; padding: 20px; background: linear-gradient(90deg, var(--accent), #b3003b); border: none; border-radius: 18px; color: #fff; font-family: 'Orbitron'; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 20px; }
+        .withdraw-btn:disabled { opacity: 0.4; filter: grayscale(1); }
+
+        /* Premium Popup Styles */
+        #customPopup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999; display: none;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .popup-content {
+            background: var(--bg); border: 1px solid var(--border);
+            width: 100%; max-width: 350px; border-radius: 28px;
+            padding: 35px 20px; text-align: center; animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .popup-icon { font-size: 50px; margin-bottom: 20px; }
+        .popup-title { font-family: 'Orbitron'; font-size: 18px; margin-bottom: 10px; }
+        .popup-msg { color: var(--text-dim); font-size: 14px; margin-bottom: 25px; line-height: 1.5; }
+        .popup-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-family: 'Orbitron'; font-weight: 700; cursor: pointer; }
+
+        #loader { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><i class="fa fa-circle-notch fa-spin" style="font-size: 40px; color: var(--accent);"></i></div>
+
+    <div id="customPopup">
+        <div class="popup-content">
+            <div id="popIcon" class="popup-icon"></div>
+            <div id="popTitle" class="popup-title"></div>
+            <p id="popMsg" class="popup-msg"></p>
+            <button id="popBtn" class="popup-btn" onclick="closePopup()"></button>
+        </div>
+    </div>
+
+    <header class="header">
+        <a href="../wallet.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <h1>Withdrawal</h1>
+    </header>
+
+    <div class="container">
+        <div class="balance-pill">
+            <div class="balance-label">Withdrawable Balance</div>
+            <div class="balance-amount">₹<span id="userBalance">0.00</span></div>
+        </div>
+
+        <div class="input-card">
+            <span class="section-label">Select Amount</span>
+            <div class="amount-grid">
+                
+                <div class="chip" onclick="selectAmt(100)">100</div>
+                <div class="chip" onclick="selectAmt(200)">200</div>
+                <div class="chip" onclick="selectAmt(500)">500</div>
+                <div class="chip" onclick="selectAmt(1000)">1000</div>
+                <div class="chip" onclick="selectAmt(2000)">2000</div>
+            </div>
+
+            <div class="fee-calc-box">
+                <div class="calc-row"><span>Amount</span><span>₹<span id="breakAmt">0</span></span></div>
+                <div class="calc-row"><span>Fee (10%)</span><span style="color:#ff4d4d">- ₹<span id="breakFee">0</span></span></div>
+                <div class="calc-row"><span>You Receive</span><span class="receive-text">₹<span id="breakFinal">0</span></span></div>
+            </div>
+        </div>
+
+        <div class="input-card">
+            <span class="section-label">UPI Address</span>
+            <input type="text" class="upi-input" id="upiId" placeholder="username@upi">
+        </div>
+
+        <button class="withdraw-btn" id="withdrawBtn" disabled onclick="handleWithdraw()">Request Withdrawal</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5P3d9xk3XBrKTZw7aQFE2DhfOYsLsG_4",
+            authDomain: "binary-battle-6917a.firebaseapp.com",
+            projectId: "binary-battle-6917a",
+            storageBucket: "binary-battle-6917a.firebasestorage.app",
+            messagingSenderId: "411576208",
+            appId: "1:411576208:web:1acb62c098fbdb550e7515"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let selectedAmount = 0;
+        let walletBalance = 0;
+        let redirectOnClose = false;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                onSnapshot(doc(db, "users", user.uid), (snap) => {
+                    if (snap.exists()) {
+                        walletBalance = snap.data().wallet_balance || 0;
+                        document.getElementById('userBalance').innerText = walletBalance.toFixed(2);
+                    }
+                });
+            } else { window.location.href = "../../login.html"; }
+        });
+
+        window.showPopup = (type, title, msg, btnText, redirect = false) => {
+            const popup = document.getElementById('customPopup');
+            const icon = document.getElementById('popIcon');
+            const btn = document.getElementById('popBtn');
+            redirectOnClose = redirect;
+            
+            icon.innerHTML = type === 'success' ? '<i class="fa-solid fa-circle-check" style="color:#00ff88"></i>' : '<i class="fa-solid fa-circle-exclamation" style="color:#ff3366"></i>';
+            document.getElementById('popTitle').innerText = title;
+            document.getElementById('popTitle').style.color = type === 'success' ? '#00ff88' : '#ff3366';
+            document.getElementById('popMsg').innerText = msg;
+            btn.innerText = btnText;
+            btn.style.background = type === 'success' ? '#00ff88' : '#ff3366';
+            btn.style.color = '#000';
+            popup.style.display = 'flex';
+        };
+
+        window.closePopup = () => {
+            document.getElementById('customPopup').style.display = 'none';
+            if (redirectOnClose) window.location.href = "../wallet.html";
+        };
+
+        window.selectAmt = (amt) => {
+            selectedAmount = amt;
+            document.getElementById('breakAmt').innerText = amt;
+            document.getElementById('breakFee').innerText = (amt * 0.10).toFixed(2);
+            document.getElementById('breakFinal').innerText = (amt * 0.90).toFixed(2);
+            document.querySelectorAll('.chip').forEach(c => {
+                c.classList.remove('active');
+                if(parseInt(c.innerText) === amt) c.classList.add('active');
+            });
+            document.getElementById('withdrawBtn').disabled = false;
+        };
+
+        window.handleWithdraw = async () => {
+            const upi = document.getElementById('upiId').value.trim();
+            if (!upi.includes('@')) return showPopup('error', 'Invalid UPI', 'Enter a valid UPI ID.', 'Retry');
+            if (walletBalance < selectedAmount) return showPopup('error', 'Low Balance', 'Insufficient funds.', 'Close');
+
+            document.getElementById('loader').style.display = 'flex';
+            const user = auth.currentUser;
+            const requestId = "WITHDRAW_" + Date.now();
+
+            try {
+                // 1. Deduct Balance
+                await updateDoc(doc(db, "users", user.uid), { wallet_balance: increment(-selectedAmount) });
+
+                // 2. Global Request for Admin
+                await setDoc(doc(db, "withdrawals", requestId), {
+                    uid: user.uid,
+                    amount: selectedAmount,
+                    receive: selectedAmount * 0.90,
+                    upi_id: upi,
+                    status: "PENDING",
+                    requestId: requestId,
+                    timestamp: new Date().toISOString()
+                });
+
+                // 3. User History
+                await setDoc(doc(db, "users", user.uid, "transactions", requestId), {
+                    amount: selectedAmount,
+                    type: "WITHDRAWAL",
+                    status: "PENDING",
+                    date: new Date().toISOString()
+                });
+
+                document.getElementById('loader').style.display = 'none';
+                showPopup('success', 'Request Sent!', 'Payment will arrive in 24 hours.', 'Great', true);
+
+            } catch (e) {
+                document.getElementById('loader').style.display = 'none';
+                showPopup('error', 'Error', 'Something went wrong.', 'Close');
+            }
+        };
+    </script>
+</body>
+</html>

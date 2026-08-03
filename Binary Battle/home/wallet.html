@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Binary Battle | Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05010a;
+            --card-glass: rgba(25, 10, 50, 0.6);
+            --accent: #8c00ff;
+            --cyan: #00e5ff;
+            --gold: #ffcc00;
+            --text-dim: #a5a5a5;
+            --border: #2d1b4d;
+            --glow: rgba(140, 0, 255, 0.4);
+            --success: #00ff88;
+            --danger: #ff3366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        body { background-color: var(--bg); color: #fff; min-height: 100vh; padding-bottom: 100px; overflow-x: hidden; }
+
+        .header { padding: 30px 20px 10px; display: flex; align-items: center; gap: 15px; }
+        .back-btn { width: 40px; height: 40px; background: var(--card-glass); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--cyan); text-decoration: none; }
+        .header h1 { font-family: 'Orbitron'; font-size: clamp(16px, 5vw, 20px); letter-spacing: 1px; }
+
+        .wallet-card-container { padding: 20px; }
+        .wallet-card {
+            background: linear-gradient(135deg, #1a0b2e 0%, #05010a 100%);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .wallet-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .chip-icon { width: 40px; margin-bottom: 20px; filter: drop-shadow(0 0 5px var(--gold)); }
+        
+        .balance-label { font-size: clamp(10px, 3vw, 12px); text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); font-weight: 700; }
+        .balance-amount { font-family: 'Orbitron'; font-size: clamp(28px, 10vw, 36px); margin: 5px 0; color: #fff; text-shadow: 0 0 15px var(--glow); }
+        .wallet-id { font-size: clamp(10px, 2.5vw, 12px); color: var(--text-dim); font-family: monospace; opacity: 0.6; }
+
+        .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 20px; }
+        .action-btn {
+            background: var(--card-glass); border: 1px solid var(--border);
+            padding: 15px; border-radius: 16px; display: flex;
+            flex-direction: column; align-items: center; gap: 8px;
+            cursor: pointer; transition: 0.3s; text-decoration: none; color: #fff;
+        }
+        .action-btn i { font-size: 20px; color: var(--cyan); }
+        .action-btn span { font-weight: 700; font-size: clamp(12px, 3.5vw, 14px); text-transform: uppercase; }
+
+        .history-section { padding: 0 20px; }
+        .section-title { font-family: 'Orbitron'; font-size: clamp(12px, 4vw, 14px); color: var(--cyan); margin-bottom: 15px; display: flex; justify-content: space-between; }
+        
+        .transaction-card {
+            background: var(--card-glass); border: 1px solid var(--border);
+            border-radius: 15px; padding: 15px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .txn-info h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .txn-info p { font-size: 11px; color: var(--text-dim); }
+        .amt-val { font-family: 'Orbitron'; font-size: 14px; font-weight: 700; }
+        .amt-deposit { color: var(--success); }
+        .amt-withdraw { color: var(--danger); }
+        .status-badge { 
+            font-size: 9px; font-weight: 800; padding: 2px 6px; 
+            border-radius: 4px; text-transform: uppercase; margin-top: 5px; display: inline-block;
+        }
+        .status-pending { background: rgba(255, 204, 0, 0.1); color: var(--gold); border: 1px solid var(--gold); }
+        .status-success { background: rgba(0, 255, 136, 0.1); color: var(--success); border: 1px solid var(--success); }
+
+        .no-activity { text-align: center; color: var(--text-dim); padding: 40px 0; font-style: italic; font-size: clamp(12px, 3.5vw, 14px); }
+
+        .tab-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; height: 70px; background: rgba(18, 8, 30, 0.9); border: 1px solid var(--border); border-radius: 20px; display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); z-index: 1000; }
+        .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-dim); text-decoration: none; }
+        .tab-item i { font-size: 20px; }
+        .tab-item span { font-size: clamp(9px, 2.5vw, 11px); font-weight: 700; text-transform: uppercase; }
+        .tab-item.active { color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+
+        #loader { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><i class="fa fa-circle-notch fa-spin" style="font-size: 30px; color: var(--cyan);"></i></div>
+
+    <header class="header">
+        <a href="home.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <h1>My Wallet</h1>
+    </header>
+
+    <div class="wallet-card-container">
+        <div class="wallet-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/6404/6404100.png" class="chip-icon" alt="chip">
+            <div class="balance-label">Total Balance</div>
+            <div class="balance-amount">₹<span id="displayBalance">0.00</span></div>
+            <div class="wallet-id" id="displayWalletID">BB-USER-XXXXX</div>
+        </div>
+    </div>
+
+    <div class="actions-grid">
+        <a href="payment/addmoney.html" class="action-btn">
+            <i class="fa-solid fa-square-plus"></i>
+            <span>Add Cash</span>
+        </a>
+        <a href="payment/withdrawal.html" class="action-btn">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>Withdraw</span>
+        </a>
+    </div>
+
+    <div class="history-section">
+        <div class="section-title">
+            <span>Recent Activity</span>
+            <span style="font-size: clamp(9px, 2.5vw, 10px); color: var(--text-dim);">Real-time</span>
+        </div>
+
+        <div id="historyList">
+            <div class="no-activity">No recent transactions found.</div>
+        </div>
+    </div>
+
+    <nav class="tab-bar">
+        <a href="home.html" class="tab-item"><i class="fa-solid fa-gamepad"></i><span>Arena</span></a>
+        <a href="match.html" class="tab-item"><i class="fa-solid fa-trophy"></i><span>Matches</span></a>
+        <a href="wallet.html" class="tab-item active"><i class="fa-solid fa-circle-dollar-to-slot"></i><span>Wallet</span></a>
+        <a href="redeem-code.html" class="tab-item"><i class="fa-solid fa-gift"></i><span>Redeem Code</span></a>
+        <a href="profile.html" class="tab-item"><i class="fa-solid fa-user-gear"></i><span>Profile</span></a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5P3d9xk3XBrKTZw7aQFE2DhfOYsLsG_4",
+            authDomain: "binary-battle-6917a.firebaseapp.com",
+            projectId: "binary-battle-6917a",
+            storageBucket: "binary-battle-6917a.firebasestorage.app",
+            messagingSenderId: "411576208",
+            appId: "1:411576208:web:1acb62c098fbdb550e7515"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Helper function to safely parse Firestore Timestamps, Strings, and Numbers
+        function parseTxDate(rawDate) {
+            if (!rawDate) return new Date();
+            if (typeof rawDate.toDate === 'function') return rawDate.toDate(); // Firestore Timestamp
+            if (typeof rawDate.seconds === 'number') return new Date(rawDate.seconds * 1000);
+            const d = new Date(rawDate);
+            return isNaN(d.getTime()) ? new Date() : d;
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userRef = doc(db, "users", user.uid);
+                
+                // 1. Real-time Balance Listener
+                onSnapshot(userRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        const rawBalance = data.wallet_balance ?? data.wallet ?? 0;
+                        const numericBalance = Number(rawBalance) || 0;
+
+                        document.getElementById('displayBalance').innerText = numericBalance.toFixed(2);
+                        
+                        const shortID = user.uid.substring(user.uid.length - 5).toUpperCase();
+                        document.getElementById('displayWalletID').innerText = "BB-USER-" + shortID;
+                    } else {
+                        document.getElementById('displayBalance').innerText = "0.00";
+                    }
+                    document.getElementById('loader').style.display = 'none';
+                }, (error) => {
+                    console.error("Wallet sync error:", error);
+                    document.getElementById('loader').style.display = 'none';
+                });
+
+                // 2. Real-time Transactions Listener
+                const rootTxQuery = query(collection(db, "transactions"), where("userId", "==", user.uid));
+
+                onSnapshot(rootTxQuery, (snapshot) => {
+                    if (snapshot.empty) {
+                        fetchSubcollectionTransactions(user.uid);
+                        return;
+                    }
+                    renderTransactions(snapshot.docs.map(d => d.data()));
+                }, (error) => {
+                    console.warn("Root transaction query fallback to subcollection:", error);
+                    fetchSubcollectionTransactions(user.uid);
+                });
+
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        function fetchSubcollectionTransactions(uid) {
+            const subColRef = collection(db, "users", uid, "transactions");
+            onSnapshot(subColRef, (snapshot) => {
+                const historyList = document.getElementById('historyList');
+                if (snapshot.empty) {
+                    historyList.innerHTML = '<div class="no-activity">No recent transactions found.</div>';
+                    return;
+                }
+                renderTransactions(snapshot.docs.map(d => d.data()));
+            }, (err) => {
+                console.error("Subcollection query error:", err);
+                document.getElementById('historyList').innerHTML = '<div class="no-activity">No recent transactions found.</div>';
+            });
+        }
+
+        function renderTransactions(txns) {
+            const historyList = document.getElementById('historyList');
+            
+            // Client-side sort using parseTxDate
+            txns.sort((a, b) => parseTxDate(b.date || b.createdAt) - parseTxDate(a.date || a.createdAt));
+
+            let html = '';
+            txns.forEach((txn) => {
+                const typeStr = (txn.type || "DEPOSIT").toUpperCase();
+                const isDeposit = typeStr === "DEPOSIT";
+                const status = (txn.status || "PENDING").toUpperCase();
+                const statusClass = status === "SUCCESS" ? "status-success" : "status-pending";
+                
+                const txDate = parseTxDate(txn.date || txn.createdAt);
+
+                html += `
+                    <div class="transaction-card">
+                        <div class="txn-info">
+                            <h4>${typeStr}</h4>
+                            <p>${txDate.toLocaleDateString()} • ${txDate.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p>
+                        </div>
+                        <div class="txn-amount">
+                            <div class="amt-val ${isDeposit ? 'amt-deposit' : 'amt-withdraw'}">
+                                ${isDeposit ? '+' : '-'} ₹${Number(txn.amount || 0).toFixed(2)}
+                            </div>
+                            <div class="status-badge ${statusClass}">${status}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            historyList.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

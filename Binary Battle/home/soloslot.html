@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Solo Slot Selection | Binary Battle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top left, #4b1f7d 0%, transparent 30%),
+                        radial-gradient(circle at bottom right, #00d4ff33 0%, transparent 30%),
+                        #050019;
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 450px; /* Constrained for 4-column mobile look */
+            padding: 25px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            background: rgba(7, 7, 35, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(132, 0, 255, 0.3);
+            border-radius: 24px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #d7c6ff;
+            text-shadow: 0 0 10px #bb7cff;
+        }
+
+        .mini {
+            text-align: center;
+            color: #17e9ff;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* 4x12 GRID LAYOUT */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .slot {
+            position: relative;
+            height: 52px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .circle {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+        }
+
+        /* Selected State */
+        .slot.selected {
+            border-color: #00e5ff;
+            background: rgba(0, 229, 255, 0.15);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            color: #00e5ff;
+            transform: scale(1.05);
+        }
+        .slot.selected .circle {
+            border-color: #00e5ff;
+            background: #00e5ff;
+            box-shadow: 0 0 8px #00e5ff;
+        }
+
+        /* Occupied State */
+        .slot.occupied {
+            opacity: 0.25;
+            background: rgba(255, 255, 255, 0.01);
+            border-color: rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .confirm-bar {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .confirm {
+            width: 100%;
+            height: 58px;
+            border-radius: 16px;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            color: white;
+            background: linear-gradient(90deg, #8d2cff, #14f1ff);
+            box-shadow: 0 8px 20px rgba(141, 44, 255, 0.3);
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .confirm:active { transform: scale(0.98); }
+
+        .confirm:disabled {
+            filter: grayscale(1);
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="title">SELECT SLOT</div>
+    <div class="mini">Solo Arena | 4x12 Position</div>
+
+    <div class="grid" id="slotGrid">
+        </div>
+
+    <div class="confirm-bar">
+        <button class="confirm" id="confirmBtn" disabled>
+            Join Match | Slot <span id="selectedLabel">--</span>
+        </button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC5P3d9xk3XBrKTZw7aQFE2DhfOYsLsG_4",
+        authDomain: "binary-battle-6917a.firebaseapp.com",
+        projectId: "binary-battle-6917a",
+        storageBucket: "binary-battle-6917a.firebasestorage.app",
+        messagingSenderId: "411576208",
+        appId: "1:411576208:web:1acb62c098fbdb550e7515"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const matchId = urlParams.get('matchId');
+    let selectedSlot = null;
+
+    const grid = document.getElementById('slotGrid');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const selectedLabel = document.getElementById('selectedLabel');
+
+    // Authentication Guard
+    onAuthStateChanged(auth, (user) => {
+        if (!user) window.location.href = "login.html";
+    });
+
+    // Render Function
+    function renderGrid(bookedSlots = {}) {
+        grid.innerHTML = '';
+        for (let i = 1; i <= 48; i++) {
+            const isOccupied = bookedSlots[i] ? true : false;
+            const slotDiv = document.createElement('div');
+            
+            slotDiv.className = `slot ${isOccupied ? 'occupied' : ''} ${selectedSlot == i ? 'selected' : ''}`;
+            slotDiv.innerHTML = `
+                <span>${i.toString().padStart(2, '0')}</span>
+                <div class="circle"></div>
+            `;
+
+            if (!isOccupied) {
+                slotDiv.onclick = () => {
+                    selectedSlot = i;
+                    selectedLabel.innerText = i.toString().padStart(2, '0');
+                    confirmBtn.disabled = false;
+                    renderGrid(bookedSlots); // Re-render to update highlights
+                };
+            }
+            grid.appendChild(slotDiv);
+        }
+    }
+
+    // Redirect Logic
+    confirmBtn.onclick = () => {
+        if (selectedSlot && matchId) {
+            window.location.href = `paymentbanner.html?matchId=${matchId}&slot=${selectedSlot}`;
+        }
+    };
+
+    // Real-time Database Listener
+    if (matchId) {
+        onSnapshot(doc(db, "tournaments", matchId), (snap) => {
+            if (snap.exists()) {
+                const data = snap.data();
+                renderGrid(data.slots || {});
+            } else {
+                console.error("Match not found");
+                renderGrid({});
+            }
+        });
+    } else {
+        alert("Invalid Match ID");
+        window.location.href = "home.html";
+    }
+</script>
+
+</body>
+</html>
