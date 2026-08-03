@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Battle | Admin Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #8c00ff;
+            --bg-dark: #05010a;
+            --card-bg: rgba(18, 8, 30, 0.95);
+            --sidebar-bg: #0d0616;
+            --border: #2d1b4d;
+            --text-muted: #a5a5a5;
+            --danger: #ff4d4d;
+            --accent: #00f2ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        body { background: var(--bg-dark); color: #fff; display: flex; flex-direction: column; min-height: 100vh; }
+
+        .header {
+            width: 100%; padding: 20px 40px; background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+        }
+        .sidebar-brand { font-family: 'Orbitron', sans-serif; color: var(--primary); font-size: 24px; }
+        
+        /* Actions container to balance buttons on the right side */
+        .header-actions { display: flex; align-items: center; gap: 25px; }
+        
+        .btn-broadcast {
+            background: rgba(0, 242, 255, 0.05); color: var(--accent); border: 1px solid var(--accent);
+            padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; font-family: 'Orbitron'; font-size: 12px; letter-spacing: 1px;
+        }
+        .btn-broadcast:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
+
+        .main-content { padding: 40px; flex: 1; margin-bottom: 120px; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-card {
+            background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); text-align: center;
+        }
+        .stat-card .value { font-size: 32px; font-weight: 700; color: var(--primary); margin: 10px 0; }
+
+        .data-section { background: var(--card-bg); border-radius: 24px; border: 1px solid var(--border); padding: 30px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; min-width: 600px; }
+        th { padding: 15px; color: var(--text-muted); border-bottom: 1px solid var(--border); text-align: left; font-size: 13px; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid rgba(45, 27, 77, 0.5); font-size: 15px; color: #e0e0e0; }
+
+        .btn-block {
+            background: rgba(255, 77, 77, 0.1); color: var(--danger); border: 1px solid var(--danger);
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s;
+        }
+        .btn-block:hover { background: var(--danger); color: #fff; }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--sidebar-bg); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 15px 10px; z-index: 1000;
+        }
+
+        .nav-link {
+            text-align: center; color: var(--text-muted); text-decoration: none;
+            flex: 1; transition: 0.3s; cursor: pointer;
+        }
+        .nav-link i { font-size: 20px; display: block; margin-bottom: 5px; }
+        .nav-link span { font-size: 10px; font-weight: 700; font-family: 'Orbitron'; }
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="sidebar-brand">B-BATTLE</div>
+        
+        <div class="header-actions">
+            <button class="btn-broadcast" onclick="location.href='notification.html'">
+                <i class="fa-solid fa-bullhorn"></i> BROADCAST
+            </button>
+            
+            <div onclick="location.href='../index.html'" style="color: var(--danger); cursor: pointer; font-weight: bold; font-size: 15px;">
+                <i class="fa fa-power-off"></i> LOGOUT
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1 style="font-family: Orbitron; margin-bottom: 30px; font-size: 20px; color: var(--primary);">ADMIN DASHBOARD</h1>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="value" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Battles</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Earnings</h3>
+                <div class="value">₹0.00</div>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <h2 style="font-family: Orbitron; font-size: 16px; color: var(--accent);">Recent Registrations</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Promo</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="adminhome.html" class="nav-link active"><i class="fa fa-chart-line"></i><span>DASHBOARD</span></a>
+        <a href="users.html" class="nav-link"><i class="fa fa-users"></i><span>USER LIST</span></a>
+        <a href="tournament.html" class="nav-link"><i class="fa fa-trophy"></i><span>TOURNAMENT</span></a>
+        <a href="redeem.html" class="nav-link"><i class="fa fa-gift"></i><span>REDEEMS</span></a>
+        <a href="withdrawal.html" class="nav-link"><i class="fa fa-hand-holding-dollar"></i><span>WITHDRAWAL</span></a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5P3d9xk3XBrKTZw7aQFE2DhfOYsLsG_4",
+            authDomain: "binary-battle-6917a.firebaseapp.com",
+            projectId: "binary-battle-6917a",
+            storageBucket: "binary-battle-6917a.firebasestorage.app",
+            messagingSenderId: "411576208",
+            appId: "1:411576208:web:1acb62c098fbdb550e7515",
+            measurementId: "G-QHKKXN93P6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global function to block/delete user
+        window.blockUser = async (userId) => {
+            if(confirm("Permanently delete this user?")) {
+                try {
+                    await deleteDoc(doc(db, "users", userId));
+                } catch (e) { alert(error.message); }
+            }
+        };
+
+        const userTable = document.getElementById('userTableBody');
+        const countDisplay = document.getElementById('totalUsers');
+        
+        // Fetch users ordered by joinedAt
+        const q = query(collection(db, "users"), orderBy("joinedAt", "desc"));
+
+        onSnapshot(q, (snapshot) => {
+            let html = "";
+            let total = 0;
+            
+            snapshot.forEach((userDoc) => {
+                const user = userDoc.data();
+                total++;
+
+                // LOGIC: Check all possible name fields saved during registration
+                const registeredName = user.fullName || user.name || user.username || "No Name Found";
+
+                html += `
+                    <tr>
+                        <td style="font-weight: 700; color: #fff;">${registeredName}</td>
+                        <td>${user.email || 'N/A'}</td>
+                        <td style="color: var(--primary); font-weight: bold;">${user.promo || 'None'}</td>
+                        <td>
+                            <button class="btn-block" onclick="blockUser('${userDoc.id}')">
+                                <i class="fa fa-ban"></i> BLOCK
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            userTable.innerHTML = html;
+            countDisplay.innerText = total;
+        }, (error) => {
+            console.error("Firestore Error:", error);
+            userTable.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Error loading data. Check console.</td></tr>`;
+        });
+    </script>
+</body>
+</html>

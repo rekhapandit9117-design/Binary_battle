@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tournament Rules | Binary Battle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #05010a;
+            --surface: rgba(15, 10, 35, 0.85);
+            --primary: #8c00ff;
+            --cyan: #00e5ff;
+            --gold: #ffcc00;
+            --border: rgba(140, 0, 255, 0.3);
+            --text-dim: #a5a5a5;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% -20%, rgba(140, 0, 255, 0.2), transparent 50%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .back-btn {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; text-decoration: none;
+        }
+
+        .header-title {
+            font-family: 'Orbitron';
+            font-size: 18px;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+        }
+
+        /* --- Rules Card --- */
+        .rules-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            margin-bottom: 30px;
+        }
+
+        .main-trophy {
+            text-align: center;
+            font-size: 40px;
+            color: var(--gold);
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px var(--gold));
+        }
+
+        .main-heading {
+            text-align: center;
+            font-family: 'Orbitron';
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: linear-gradient(to bottom, #fff, #8c00ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Section Styling --- */
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Orbitron';
+            font-size: 14px;
+            color: var(--cyan);
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+            padding-bottom: 5px;
+        }
+
+        .rule-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .rule-icon {
+            color: var(--primary);
+            font-size: 16px;
+            margin-top: 3px;
+        }
+
+        .rule-content b {
+            display: block;
+            font-size: 15px;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .rule-content p {
+            font-size: 14px;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        /* --- Footer Button --- */
+        .accept-area {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(90deg, var(--primary), #5a00a3);
+            color: #fff;
+            font-family: 'Orbitron';
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(140, 0, 255, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-main:active { transform: scale(0.98); opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-nav">
+        <a href="home.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="header-title">PROTOCOL</div>
+    </div>
+
+    <div class="rules-card">
+        <div class="main-trophy"><i class="fa-solid fa-trophy"></i></div>
+        <h1 class="main-heading">FREE FIRE RULES</h1>
+
+        <div class="section">
+            <div class="section-header">
+                <i class="fa-solid fa-gear"></i> 1. GENERAL TOURNAMENT
+            </div>
+            
+            <div class="rule-item">
+                <i class="fa-solid fa-users rule-icon"></i>
+                <div class="rule-content">
+                    <b>Game Mode & Teams</b>
+                    <p>solo (1 player per team). Maximum 48 teams (48 players total).</p>
+                    <p>duo (2 players per team). Maximum 24 teams (48 players total).</p>
+                    <p>Squad (4 players per team). Maximum 12 teams (48 players total).</p>
+                </div>
+            </div>
+
+            <div class="rule-item">
+                <i class="fa-solid fa-mobile-screen rule-icon"></i>
+                <div class="rule-content">
+                    <b>Platform Only</b>
+                    <p>Strictly Mobile only. Emulators and pc players are not allowed if you join than you kicked by room.</p>
+                </div>
+            </div>
+
+            <div class="rule-item">
+                <i class="fa-solid fa-map rule-icon"></i>
+                <div class="rule-content">
+                    <b>Match Format</b>
+                    <p>Custom Room (Battle Royale). Registered player IDs required.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <i class="fa-solid fa-gun"></i> 2. MATCH CONDUCT
+            </div>
+
+            <div class="rule-item">
+                <i class="fa-solid fa-key rule-icon"></i>
+                <div class="rule-content">
+                    <b>Room Credentials</b>
+                    <p>ID and Password provided 10 minutes before the match start.</p>
+                </div>
+            </div>
+
+            <div class="rule-item">
+                <i class="fa-solid fa-hourglass-start rule-icon"></i>
+                <div class="rule-content">
+                    <b>Late Arrival</b>
+                    <p>Enter room within 5 minutes of sharing credentials or face disqualification.</p>
+                </div>
+            </div>
+
+            <div class="rule-item">
+                <i class="fa-solid fa-wifi rule-icon"></i>
+                <div class="rule-content">
+                    <b>Disconnections</b>
+                    <p>Must rejoin immediately. if you disconnect, and you cant rejoin, you will be disqualified.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accept-area">
+            <button class="btn-main" onclick="location.href='home.html'">UNDERSTOOD</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

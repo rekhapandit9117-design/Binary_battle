@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Binary Battle | About Us</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #05010a;
+            --card: rgba(18, 8, 30, 0.7);
+            --accent: #8c00ff;
+            --cyan: #00e5ff;
+            --text-dim: #a5a5a5;
+            --border: #2d1b4d;
+            --glow: rgba(140, 0, 255, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(140, 0, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(0, 229, 255, 0.05) 0%, transparent 40%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(18, 8, 30, 0.9);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+        }
+
+        .back-btn {
+            color: var(--cyan);
+            font-size: 20px;
+            margin-right: 20px;
+            text-decoration: none;
+        }
+
+        .header-title {
+            font-family: 'Orbitron';
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .content-container {
+            padding: 30px 20px 100px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Hero Brand Section */
+        .brand-hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            font-family: 'Orbitron';
+            font-size: 32px;
+            background: linear-gradient(to right, var(--cyan), var(--accent));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Information Cards */
+        .info-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--accent);
+        }
+
+        .info-card.cyan-edge::before { background: var(--cyan); }
+
+        .card-title {
+            font-family: 'Orbitron';
+            font-size: 14px;
+            color: var(--cyan);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+        }
+
+        .card-text {
+            font-size: 15px;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .highlight { color: var(--cyan); font-weight: 700; }
+
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, rgba(140, 0, 255, 0.1), rgba(0, 229, 255, 0.05));
+            border: 1px dashed var(--accent);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .telegram-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--cyan);
+            font-family: 'Orbitron';
+            font-size: 16px;
+            text-decoration: none;
+            border: 1px solid var(--cyan);
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+
+        .telegram-link:active {
+            background: var(--cyan);
+            color: #000;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-family: 'Orbitron';
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 40px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="profile.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1 class="header-title">About Us</h1>
+    </header>
+
+    <div class="content-container">
+        
+        <div class="brand-hero">
+            <h2 class="brand-logo">BINARY BATTLE</h2>
+            <p style="color: var(--text-dim); font-size: 14px;">Next-Gen Skill-Based Esports</p>
+        </div>
+
+        <!-- Mission Card -->
+        <div class="info-card">
+            <div class="card-title"><i class="fa-solid fa-crosshairs"></i> Our Platform</div>
+            <p class="card-text">
+                Binary Battle is a skill-based esports platform where warriors join tournaments and win 
+                <span class="highlight">Real Cash</span>. We prioritize fair gameplay, ultra-fast matchmaking, 
+                and secure, lightning-quick withdrawals for all elites.
+            </p>
+        </div>
+
+        <!-- Integrity Card -->
+        <div class="info-card cyan-edge">
+            <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Combat Integrity</div>
+            <p class="card-text">
+                We maintain zero tolerance against cheating, hacking, or unfair practices. 
+                Every report undergoes <span class="highlight">Manual Review</span>, and suspicious 
+                players are thoroughly investigated via device-level checks.
+            </p>
+        </div>
+
+        <!-- Protection Card -->
+        <div class="info-card">
+            <div class="card-title"><i class="fa-solid fa-user-shield"></i> Player Guarantee</div>
+            <p class="card-text">
+                In the rare event a verified hacker bypasses our security, we take full responsibility for 
+                the oversight. Binary Battle is committed to providing <span class="highlight">Compensation</span> 
+                to any affected user under such confirmed circumstances.
+            </p>
+        </div>
+
+        <!-- Contact/Support -->
+        <div class="contact-box">
+            <p style="font-size: 14px; margin-bottom: 5px;">Spot Unfair Activity? Report with Proof:</p>
+            <a href="#" class="telegram-link">@BinaryBattleCare</a>
+            <p style="font-size: 11px; color: var(--text-dim); margin-top: 10px;">Immediate Action Guaranteed.</p>
+        </div>
+
+        <div class="footer-note">
+            COMPETITIVE • TRANSPARENT • TRUSTWORTHY
+        </div>
+
+    </div>
+
+</body>
+</html>

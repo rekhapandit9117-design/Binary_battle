@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>1v1 Battle Selection | Binary Battle</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #050019;
+            --surface: rgba(13, 5, 35, 0.85);
+            --accent: #ff0055; /* Aggressive Red for 1v1 */
+            --cyan: #00f2ff;
+            --selected: #00ff88;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+        
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #1a0b2e 0%, #050019 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 28px; letter-spacing: 3px; color: #fff; text-shadow: 0 0 20px var(--accent); }
+        .header p { font-size: 11px; color: var(--cyan); margin-top: 8px; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* 1v1 DUAL SLOT LAYOUT */
+        .battle-arena {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+        }
+
+        .vs-divider {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg);
+            border: 2px solid var(--accent);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--accent);
+            z-index: 10;
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .player-slot {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-slot::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--cyan);
+            opacity: 0.3;
+        }
+
+        .slot-title { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; opacity: 0.6; }
+        .slot-num { font-size: 32px; font-weight: 800; color: #fff; }
+
+        /* Selected State */
+        .player-slot.selected {
+            border-color: var(--selected);
+            background: rgba(0, 255, 136, 0.05);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+            transform: translateY(-5px);
+        }
+        .player-slot.selected .slot-num { color: var(--selected); text-shadow: 0 0 10px var(--selected); }
+
+        /* Occupied State */
+        .player-slot.occupied {
+            opacity: 0.3;
+            filter: grayscale(1);
+            cursor: not-allowed;
+            pointer-events: none;
+            border-style: dashed;
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 40px;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            height: 60px;
+            border-radius: 18px;
+            border: none;
+            background: linear-gradient(90deg, #ff0055, #8d2cff);
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 0, 85, 0.3);
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .confirm-btn:disabled {
+            filter: grayscale(1);
+            opacity: 0.4;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>1v1 SHOWDOWN</h1>
+        <p>Select your side of the battlefield</p>
+    </div>
+
+    <div class="battle-arena">
+        <div class="vs-divider">VS</div>
+
+        <div class="player-slot" id="slot-1" onclick="selectSlot(1)">
+            <div class="slot-title">CHALLENGER A</div>
+            <div class="slot-num">01</div>
+        </div>
+
+        <div class="player-slot" id="slot-2" onclick="selectSlot(2)">
+            <div class="slot-title">CHALLENGER B</div>
+            <div class="slot-num">02</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button class="confirm-btn" id="confirmBtn" disabled onclick="handleConfirm()">
+            Lock My Position
+        </button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5P3d9xk3XBrKTZw7aQFE2DhfOYsLsG_4",
+            authDomain: "binary-battle-6917a.firebaseapp.com",
+            projectId: "binary-battle-6917a",
+            storageBucket: "binary-battle-6917a.firebasestorage.app",
+            messagingSenderId: "411576208",
+            appId: "1:411576208:web:1acb62c098fbdb550e7515"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const matchId = urlParams.get('matchId');
+        let selectedSlot = null;
+
+        // Security Check
+        onAuthStateChanged(auth, (user) => {
+            if (!user) window.location.href = "login.html";
+        });
+
+        function updateUI(bookedSlots = {}) {
+            for (let i = 1; i <= 2; i++) {
+                const slotEl = document.getElementById(`slot-${i}`);
+                const isTaken = bookedSlots[i] ? true : false;
+
+                // Reset classes
+                slotEl.className = 'player-slot';
+                
+                if (isTaken) {
+                    slotEl.classList.add('occupied');
+                } else if (selectedSlot === i) {
+                    slotEl.classList.add('selected');
+                }
+            }
+        }
+
+        window.selectSlot = (num) => {
+            selectedSlot = num;
+            document.getElementById('confirmBtn').disabled = false;
+            // Update local UI immediately for responsiveness
+            updateUI(window.currentBookedSlots);
+        };
+
+        window.handleConfirm = () => {
+            if (selectedSlot && matchId) {
+                // Navigate to payment page
+                window.location.href = `paymentbanner.html?matchId=${matchId}&slot=${selectedSlot}`;
+            }
+        };
+
+        if (matchId) {
+            onSnapshot(doc(db, "tournaments", matchId), (snap) => {
+                if (snap.exists()) {
+                    window.currentBookedSlots = snap.data().slots || {};
+                    updateUI(window.currentBookedSlots);
+                }
+            });
+        } else {
+            window.location.href = "home.html";
+        }
+    </script>
+</body>
+</html>

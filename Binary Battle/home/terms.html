@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Binary Battle | Terms & Conditions</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #05010a;
+            --card: rgba(18, 8, 30, 0.7);
+            --accent: #8c00ff;
+            --cyan: #00e5ff;
+            --text-dim: #a5a5a5;
+            --border: #2d1b4d;
+            --glow: rgba(140, 0, 255, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(140, 0, 255, 0.15) 0%, transparent 50%),
+                linear-gradient(rgba(18, 8, 30, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(18, 8, 30, 0.5) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Navigation */
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(18, 8, 30, 0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+        }
+
+        .back-btn {
+            color: var(--cyan);
+            font-size: 20px;
+            margin-right: 20px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .header-title {
+            font-family: 'Orbitron';
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            padding: 25px 20px 100px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .intro-text {
+            color: var(--text-dim);
+            font-size: 15px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* Terms Card Styling */
+        .terms-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .terms-card:active {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--glow);
+        }
+
+        .section-tag {
+            background: linear-gradient(45deg, var(--accent), var(--cyan));
+            color: #fff;
+            font-family: 'Orbitron';
+            font-size: 10px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .terms-card h3 {
+            font-family: 'Orbitron';
+            font-size: 14px;
+            color: var(--cyan);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terms-card ul {
+            list-style: none;
+        }
+
+        .terms-card li {
+            color: #e0e0e0;
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .terms-card li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .footer-note {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(140, 0, 255, 0.1);
+            border: 1px dashed var(--accent);
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .footer-note p {
+            font-size: 14px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .footer-tag {
+            text-align: center;
+            margin-top: 40px;
+            font-family: 'Orbitron';
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="profile.html" class="back-btn">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <h1 class="header-title">Terms of Battle</h1>
+    </header>
+
+    <div class="container">
+        <p class="intro-text">
+            Welcome to <b>Binary Battle</b>. By accessing our platform, you agree to comply with the following protocols.
+        </p>
+
+        <!-- Section 1: ELIGIBILITY (Reference: team 1.jpg) -->
+        <div class="terms-card">
+            <span class="section-tag">PROTOCOL 01</span>
+            <h3><i class="fa-solid fa-user-check"></i> ELIGIBILITY</h3>
+            <ul>
+                <li>Users must be 18 years or older to register and participate.</li>
+                <li>Only one account per user/device/IP is allowed.</li>
+                <li>Providing false or incomplete information may result in termination.</li>
+                <li>Binary Battle reserves the right to verify identity at any time.</li>
+            </ul>
+        </div>
+
+        <!-- Section 2: FAIR PLAY (Reference: team 1.jpg) -->
+        <div class="terms-card">
+            <span class="section-tag">PROTOCOL 02</span>
+            <h3><i class="fa-solid fa-shield-halved"></i> FAIR PLAY POLICY</h3>
+            <ul>
+                <li>All matches are strictly skill-based and competitive.</li>
+                <li>Use of hacks, cheats, or emulators is strictly prohibited.</li>
+                <li>Teaming or exploiting bugs will lead to immediate action.</li>
+                <li>Suspicious activity results in a permanent ban without warning.</li>
+            </ul>
+        </div>
+
+        <!-- Section 3: PAYMENTS (Reference: team 1.jpg / 2.jpg) -->
+        <div class="terms-card">
+            <span class="section-tag">PROTOCOL 03</span>
+            <h3><i class="fa-solid fa-wallet"></i> PAYMENTS & CASH</h3>
+            <ul>
+                <li>All deposits are final and non-refundable.</li>
+                <li>Users must ensure correct payment details before transactions.</li>
+                <li>We are not responsible for failures due to user error.</li>
+            </ul>
+        </div>
+
+        <!-- Section 4: WITHDRAWALS (Reference: 2.jpg) -->
+        <div class="terms-card">
+            <span class="section-tag">PROTOCOL 04</span>
+            <h3><i class="fa-solid fa-money-bill-transfer"></i> WITHDRAWALS</h3>
+            <ul>
+                <li>Withdrawals are processed within the platform's specified timeframe.</li>
+                <li>Accurate UPI/Bank details are mandatory to avoid delays.</li>
+                <li>Fraudulent activity may result in withdrawal holds or bans.</li>
+            </ul>
+        </div>
+
+        <!-- Section 5: ACCOUNT SECURITY (Reference: 2.jpg) -->
+        <div class="terms-card">
+            <span class="section-tag">PROTOCOL 05</span>
+            <h3><i class="fa-solid fa-lock"></i> ACCOUNT SECURITY</h3>
+            <ul>
+                <li>Users are solely responsible for account credential confidentiality.</li>
+                <li>Sharing account access with others is strictly prohibited.</li>
+                <li>Binary Battle staff will NEVER ask for your password or OTP.</li>
+            </ul>
+        </div>
+
+        <!-- Section 6: TOURNAMENT RULES (Reference: 3.jpg) -->
+        <div class="terms-card">
+            <span class="section-tag">PROTOCOL 06</span>
+            <h3><i class="fa-solid fa-trophy"></i> TOURNAMENT RULES</h3>
+            <ul>
+                <li>Each tournament may have specific rules followed strictly.</li>
+                <li>Players must join matches on time; delays result in disqualification.</li>
+                <li>Match results declared are final unless reviewed by staff.</li>
+            </ul>
+        </div>
+
+        <!-- Section 7: TECHNICAL ISSUES (Reference: 3.jpg) -->
+        <div class="terms-card">
+            <span class="section-tag">PROTOCOL 07</span>
+            <h3><i class="fa-solid fa-microchip"></i> TECHNICAL ISSUES</h3>
+            <ul>
+                <li>Users are responsible for stable internet and device performance.</li>
+                <li>Binary Battle is not liable for losses due to lag or crashes.</li>
+                <li>Server-side issues will be reviewed and compensated if applicable.</li>
+            </ul>
+        </div>
+
+        <!-- Final Commitment (Reference: 4.jpg) -->
+        <div class="footer-note">
+            <p>🔒 Binary Battle is committed to a fair, secure, and transparent gaming environment.</p>
+            <p style="font-size: 12px; color: var(--cyan);">By continuing, you agree to abide by all protocols above.</p>
+        </div>
+
+        <div class="footer-tag">
+            BINARY BATTLE 
+        </div>
+
+    </div>
+
+</body>
+</html>
